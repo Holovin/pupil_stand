@@ -5,11 +5,14 @@ import RandomDot from './RandomDot';
 import Calibrator from './Calibrator';
 
 class App extends React.Component {
+
+
     constructor(props) {
         super(props);
 
-        this.panels = [];
         this.state = {
+            panels: [],
+            activePanelId: 1,
             activeRegion: '',
         }
     }
@@ -19,22 +22,20 @@ class App extends React.Component {
         const activeRegion = ZingTouch.Region(rootElement);
         const swipe = new ZingTouch.Swipe({ escapeVelocity: 0.5, maxRestTime: 50 });
         activeRegion.bind(rootElement, swipe, this.swipeHandler);
-        // this.activeRegion.bind(rootElement, swipe, this.swipeHandler);
 
+        const panels = [];
         [...document.getElementsByClassName('pan')].forEach(panel => {
-            this.panels.push(panel);
+            panels.push(panel);
         });
-
-        this.togglePanel(1);
 
         this.setState({
             activeRegion,
-        });
+            panels,
+        }, () => this.togglePanel(1));
     }
 
     swipeHandler = (e => {
         const angle = e.detail.data[0].currentDirection;
-        console.log(angle);
 
         // swipe left
         if (angle > 150 && angle < 210) {
@@ -50,7 +51,7 @@ class App extends React.Component {
     });
 
     togglePanel(id) {
-        this.panels.forEach(panel => {
+        this.state.panels.forEach(panel => {
             if (+panel.id.substr(3) === id) {
                 panel.style.display = 'block';
 
@@ -58,16 +59,24 @@ class App extends React.Component {
                 panel.style.display = 'none';
             }
         });
+
+        this.setState({
+            activePanelId: id,
+        });
+    }
+
+    isActivePanel(id) {
+        return this.state.activePanelId === id;
     }
 
     render() {
         return (
             <div className={'fullscreen'} id='root'>
                 <div className='hide pan' id='pan1'>
-                    <Calibrator activeRegion={this.state.activeRegion}> </Calibrator>
+                    <Calibrator activeRegion={this.state.activeRegion} isActive={this.isActivePanel(1)}> </Calibrator>
                 </div>
                 <div className='hide pan' id='pan2'>
-                    <RandomDot> </RandomDot>
+                    <RandomDot isActive={this.isActivePanel(2)}> </RandomDot>
                 </div>
             </div>
         );
