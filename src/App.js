@@ -1,19 +1,16 @@
 import React from 'react';
-import './index.css';
 import ZingTouch from 'zingtouch/src/ZingTouch';
 import RandomDot from './RandomDot';
 import Calibrator from './Calibrator';
+import './index.css';
 
 class App extends React.Component {
-
-
     constructor(props) {
         super(props);
 
         this.state = {
             panels: [],
             activePanelId: 1,
-            activeRegion: '',
         }
     }
 
@@ -29,7 +26,6 @@ class App extends React.Component {
         });
 
         this.setState({
-            activeRegion,
             panels,
         }, () => this.togglePanel(1));
     }
@@ -73,7 +69,7 @@ class App extends React.Component {
         return (
             <div className={'fullscreen'} id='root'>
                 <div className='hide pan' id='pan1'>
-                    <Calibrator activeRegion={this.state.activeRegion} isActive={this.isActivePanel(1)}> </Calibrator>
+                    <Calibrator isActive={this.isActivePanel(1)}> </Calibrator>
                 </div>
                 <div className='hide pan' id='pan2'>
                     <RandomDot isActive={this.isActivePanel(2)}> </RandomDot>

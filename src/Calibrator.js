@@ -1,6 +1,7 @@
 import React from 'react';
 import './index.css';
 import anime from 'animejs/lib/anime.es.js';
+import ZingTouch from 'zingtouch/src/ZingTouch';
 
 class Calibrator extends React.Component {
     constructor(props) {
@@ -10,14 +11,12 @@ class Calibrator extends React.Component {
     }
 
     componentDidMount() {
-        // TODO: lol, i know
-        setTimeout(() => {
-            const tapField = document.getElementById('tapField');
-            this.props.activeRegion.bind(tapField, 'tap', this.handleDotClick);
+        const tapField = document.getElementById('tapField');
+        this.activeRegion = ZingTouch.Region(document.getElementById('root'));
+        this.activeRegion.bind(tapField, 'tap', this.handleDotClick);
 
-            [...document.getElementsByClassName('calibrate')].forEach(dot => {
-                this.props.activeRegion.bind(dot, 'tap', this.handleDotClick);
-            });
+        [...document.getElementsByClassName('calibrate')].forEach(dot => {
+            this.activeRegion.bind(dot, 'tap', this.handleDotClick);
         });
     }
 
@@ -28,7 +27,7 @@ class Calibrator extends React.Component {
             if (target.id === 'tapField') {
                 let enabledIndex = -1;
 
-                const items = state.items.map((item, index, array) => {
+                const items = state.items.map((item, index) => {
                     const id = this.getCalibrateId(index);
 
                     if (item === 1 && enabledIndex === -1) {
@@ -101,7 +100,7 @@ class Calibrator extends React.Component {
     render() {
         return (
             <div id={'tapField'} className={'fullscreen'}>
-                {!!this.props.activeRegion ? this.renderDots() : ''}
+                { this.renderDots() }
             </div>
         );
     }
