@@ -80,8 +80,7 @@ class App extends React.Component {
         return (
             <div className={'fullscreen'} id='root'>
                 <div className='hide pan' id='pan1'>
-                    {/*<CailbratorCircle isActive={this.isActivePanel(1)}> </CailbratorCircle>*/}
-                    TODO
+                    <CailbratorCircle isActive={this.isActivePanel(1)}> </CailbratorCircle>
                 </div>
                 <div className='hide pan' id='pan2'>
                     <Calibrator isActive={this.isActivePanel(2)}> </Calibrator>

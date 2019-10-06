@@ -40,7 +40,7 @@ class Calibrator extends React.Component {
                     return newValue;
                 });
 
-                if (enabledIndex === state.items.length) {
+                if (enabledIndex === state.items.length || enabledIndex === -1) {
                     this.toggleCalibrateDot('calibrate0', 1);
                     items[0] = 1;
                 }
@@ -76,23 +76,25 @@ class Calibrator extends React.Component {
     }
 
     renderDots = (() => {
-        const values = ['5px', 'calc(50% - 10px)', 'calc(100% - 30px)'];
+        const sideSize = 20;
+        const values = [
+            '5px',
+            'calc(50% - ' + (sideSize / 2) + 'px)',
+            'calc(100% - ' + parseInt(sideSize * 1.5) + 'px)'
+        ];
+
         return values.map((x, indexX) =>
             values.map((y, indexY) => {
-                const key = indexX * 3 + indexY;
+                const key = indexX * values.length + indexY;
                 const style = {
                     display: 'block', position: 'fixed',
                     top: x + '', left: y + '',
-                    width: '20px', height: '20px',
-                    margin: '5x', borderRadius: '20px',
-                    background: '#F00', fontSize: '5px',
+                    width: sideSize + 'px', height: sideSize + 'px',
+                    margin: parseInt(sideSize / 4) + 'px', borderRadius: sideSize + 'px',
+                    background: '#F00',
                 };
 
-                return(<div className={'calibrate'}
-                            key={key}
-                            id={'calibrate' + key}
-                            style={style}>
-                </div>);
+                return(<div className={'calibrate'} key={key} id={'calibrate' + key} style={style}> </div>);
             }),
         );
     });

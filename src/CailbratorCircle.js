@@ -11,11 +11,11 @@ class CailbratorCircle extends React.Component {
     }
 
     componentDidMount() {
-        const tapField = document.getElementById('tapField');
+        const tapField = document.getElementById('tapFieldCircle');
         this.activeRegion = ZingTouch.Region(document.getElementById('root'));
         this.activeRegion.bind(tapField, 'tap', this.handleDotClick);
 
-        [...document.getElementsByClassName('calibrate')].forEach(dot => {
+        [...document.getElementsByClassName('calibrateCircle')].forEach(dot => {
             this.activeRegion.bind(dot, 'tap', this.handleDotClick);
         });
     }
@@ -24,7 +24,7 @@ class CailbratorCircle extends React.Component {
         const target = e.target;
 
         this.setState(state => {
-            if (target.id === 'tapField') {
+            if (target.id === 'tapFieldCircle') {
                 let enabledIndex = -1;
 
                 const items = state.items.map((item, index) => {
@@ -40,8 +40,8 @@ class CailbratorCircle extends React.Component {
                     return newValue;
                 });
 
-                if (enabledIndex === state.items.length) {
-                    this.toggleCalibrateDot('calibrate0', 1);
+                if (enabledIndex === state.items.length || enabledIndex === -1) {
+                    this.toggleCalibrateDot('calibrateCircle0', 1);
                     items[0] = 1;
                 }
 
@@ -61,7 +61,7 @@ class CailbratorCircle extends React.Component {
     });
 
     getCalibrateId(id) {
-        return 'calibrate' + id;
+        return 'calibrateCircle' + id;
     }
 
     toggleCalibrateDot(id, state) {
@@ -71,35 +71,37 @@ class CailbratorCircle extends React.Component {
             duration: 200,
 
             opacity: state ? 1 : 0.1,
-            backgroundColor: state ? '#F00' : '#CCCCCC',
+            background: state ? 'url(v4_calib_marker.jpg) 0% 0% / cover' : '#aaa',
         });
     }
 
     renderDots = (() => {
-        const values = ['5px', 'calc(50% - 10px)', 'calc(100% - 30px)'];
+        const sideSize = 60;
+        const values = [
+            '5px',
+            'calc(50% - ' + (sideSize / 2) + 'px)',
+            'calc(100% - ' + parseInt(sideSize * 1.5) + 'px)'
+        ];
+
         return values.map((x, indexX) =>
             values.map((y, indexY) => {
-                const key = indexX * 3 + indexY;
+                const key = indexX * values.length + indexY;
                 const style = {
                     display: 'block', position: 'fixed',
                     top: x + '', left: y + '',
-                    width: '20px', height: '20px',
-                    margin: '5x', borderRadius: '20px',
-                    background: '#F00', fontSize: '5px',
+                    width: sideSize + 'px', height: sideSize + 'px',
+                    borderRadius: sideSize + 'px', margin: sideSize / 10 + 'px',
+                    background: '#EEE',
                 };
 
-                return(<div className={'calibrate'}
-                            key={key}
-                            id={'calibrate' + key}
-                            style={style}>
-                </div>);
+                return(<div className={'calibrateCircle'} key={key} id={'calibrateCircle' + key} style={style}> </div>);
             }),
         );
     });
 
     render() {
         return (
-            <div id={'tapField'} className={'fullscreen'}>
+            <div id={'tapFieldCircle'} className={'fullscreen'}>
                 { this.renderDots() }
             </div>
         );
