@@ -3,6 +3,7 @@ import ZingTouch from 'zingtouch/src/ZingTouch';
 import RandomDot from './RandomDot';
 import Calibrator from './Calibrator';
 import './index.css';
+import CailbratorCircle from './CailbratorCircle';
 
 class App extends React.Component {
     constructor(props) {
@@ -27,28 +28,38 @@ class App extends React.Component {
 
         this.setState({
             panels,
-        }, () => this.togglePanel(1));
+        }, () => this.switchPanel(1));
     }
 
     swipeHandler = (e => {
         const angle = e.detail.data[0].currentDirection;
 
-        // swipe left
+        // swipe right to left
         if (angle > 150 && angle < 210) {
-            this.togglePanel(2);
+            this.switchPanel(1);
             return;
         }
 
-        // swipe right
+        // swipe right to left
         if (angle > 330 || angle < 30) {
-            this.togglePanel(1);
+            this.switchPanel(-1);
             return;
         }
     });
 
-    togglePanel(id) {
+    switchPanel(id) {
+        let newId = this.state.activePanelId + id;
+
+        if (newId >= this.state.panels.length) {
+            newId = 3;
+        }
+
+        if (newId <= 0) {
+            newId = 1;
+        }
+
         this.state.panels.forEach(panel => {
-            if (+panel.id.substr(3) === id) {
+            if (+panel.id.substr(3) === newId) {
                 panel.style.display = 'block';
 
             } else {
@@ -57,7 +68,7 @@ class App extends React.Component {
         });
 
         this.setState({
-            activePanelId: id,
+            activePanelId: newId,
         });
     }
 
@@ -69,10 +80,14 @@ class App extends React.Component {
         return (
             <div className={'fullscreen'} id='root'>
                 <div className='hide pan' id='pan1'>
-                    <Calibrator isActive={this.isActivePanel(1)}> </Calibrator>
+                    {/*<CailbratorCircle isActive={this.isActivePanel(1)}> </CailbratorCircle>*/}
+                    TODO
                 </div>
                 <div className='hide pan' id='pan2'>
-                    <RandomDot isActive={this.isActivePanel(2)}> </RandomDot>
+                    <Calibrator isActive={this.isActivePanel(2)}> </Calibrator>
+                </div>
+                <div className='hide pan' id='pan3'>
+                    <RandomDot isActive={this.isActivePanel(3)}> </RandomDot>
                 </div>
             </div>
         );
