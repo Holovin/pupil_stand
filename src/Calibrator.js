@@ -4,6 +4,9 @@ import anime from 'animejs/lib/anime.es.js';
 import ZingTouch from 'zingtouch/src/ZingTouch';
 
 class Calibrator extends React.Component {
+    static fieldName = 'tapField';
+    static elementName = 'calibrate';
+
     constructor(props) {
         super(props);
 
@@ -11,11 +14,11 @@ class Calibrator extends React.Component {
     }
 
     componentDidMount() {
-        const tapField = document.getElementById('tapField');
+        const tapField = document.getElementById(Calibrator.fieldName);
         this.activeRegion = ZingTouch.Region(document.getElementById('root'));
         this.activeRegion.bind(tapField, 'tap', this.handleDotClick);
 
-        [...document.getElementsByClassName('calibrate')].forEach(dot => {
+        [...document.getElementsByClassName(Calibrator.elementName)].forEach(dot => {
             this.activeRegion.bind(dot, 'tap', this.handleDotClick);
         });
     }
@@ -24,7 +27,7 @@ class Calibrator extends React.Component {
         const target = e.target;
 
         this.setState(state => {
-            if (target.id === 'tapField') {
+            if (target.id === Calibrator.fieldName) {
                 let enabledIndex = -1;
 
                 const items = state.items.map((item, index) => {
@@ -41,7 +44,7 @@ class Calibrator extends React.Component {
                 });
 
                 if (enabledIndex === state.items.length || enabledIndex === -1) {
-                    this.toggleCalibrateDot('calibrate0', 1);
+                    this.toggleCalibrateDot(`${this.getCalibrateId(0)}`, 1);
                     items[0] = 1;
                 }
 
@@ -61,7 +64,7 @@ class Calibrator extends React.Component {
     });
 
     getCalibrateId(id) {
-        return 'calibrate' + id;
+        return Calibrator.elementName + id;
     }
 
     toggleCalibrateDot(id, state) {
@@ -94,14 +97,15 @@ class Calibrator extends React.Component {
                     background: '#F00',
                 };
 
-                return(<div className={'calibrate'} key={key} id={'calibrate' + key} style={style}> </div>);
+                return(<div className={Calibrator.elementName} key={key}
+                            id={Calibrator.elementName + key} style={style}> </div>);
             }),
         );
     });
 
     render() {
         return (
-            <div id={'tapField'} className={'fullscreen'}>
+            <div id={Calibrator.fieldName} className={'fullscreen'}>
                 { this.renderDots() }
             </div>
         );
