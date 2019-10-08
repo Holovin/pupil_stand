@@ -3,8 +3,9 @@ import ZingTouch from 'zingtouch/src/ZingTouch';
 import RandomDot from './RandomDot';
 import Calibrator from './Calibrator';
 import './index.css';
-import CalibratorCircle from './CalibratorCircle';
+import CalibratorSingleCircle from './CalibratorSingleCircle';
 import anime from 'animejs';
+import CalibratorCircles from './CalibratorCircles';
 
 class App extends React.Component {
     static panelLabel = 'panelLabel';
@@ -33,7 +34,7 @@ class App extends React.Component {
         this.setState({
             panels,
             panelLabel: document.getElementById(App.panelLabel),
-        }, () => this.switchPanel(0));
+        }, () => this.switchPanel(-2));
     }
 
     swipeHandler = (e => {
@@ -78,7 +79,7 @@ class App extends React.Component {
         });
     }
 
-    showLabelWithNewText(text) {
+    showLabelWithNewText = (text) => {
         anime.remove(this.state.panelLabel);
 
         const panelElement = this.state.panelLabel;
@@ -96,7 +97,7 @@ class App extends React.Component {
                 duration: 350,
             }]
         });
-    }
+    };
 
     isActivePanel(id) {
         return this.state.activePanelId === id;
@@ -108,11 +109,11 @@ class App extends React.Component {
                 <div id={App.panelLabel} className={App.panelLabel}>Loading...</div>
 
                 <div className='hide pan' id='pan0' data-label={'Screen marker calibration'}>
-                    WIP
+                    <CalibratorCircles alert={this.showLabelWithNewText}> </CalibratorCircles>
                 </div>
 
                 <div className='hide pan' id='pan1' data-label={'Single marker calibration'}>
-                    <CalibratorCircle isActive={this.isActivePanel(1)}> </CalibratorCircle>
+                    <CalibratorSingleCircle isActive={this.isActivePanel(1)}> </CalibratorSingleCircle>
                 </div>
 
                 <div className='hide pan' id='pan2' data-label={'Natural Features calibration'}>

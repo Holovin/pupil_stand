@@ -3,9 +3,9 @@ import './index.css';
 import anime from 'animejs/lib/anime.es.js';
 import ZingTouch from 'zingtouch/src/ZingTouch';
 
-class CalibratorCircle extends React.Component {
-    static fieldName = 'tapFieldCircle';
-    static elementName = 'calibrateCircle';
+class CalibratorSingleCircle extends React.Component {
+    static fieldName = 'tapFieldSingleCircle';
+    static elementName = 'calibrateSingleCircle';
 
     constructor(props) {
         super(props);
@@ -14,14 +14,14 @@ class CalibratorCircle extends React.Component {
     }
 
     componentDidMount() {
-        const tapField = document.getElementById(CalibratorCircle.fieldName);
+        const tapField = document.getElementById(CalibratorSingleCircle.fieldName);
         this.activeRegion = ZingTouch.Region(document.getElementById('root'));
         this.activeRegion.bind(tapField, 'tap', this.handleDotClick);
     }
 
     handleDotClick = (() => {
         this.setState(state => {
-            this.toggleCalibrateDot(CalibratorCircle.elementName, !state.visible);
+            this.toggleCalibrateDot(CalibratorSingleCircle.elementName, !state.visible);
 
             return {
                 visible: !state.visible,
@@ -46,13 +46,17 @@ class CalibratorCircle extends React.Component {
             justifyContent: 'center',
         };
 
-        const style = { width: '100%' };
+        const style = {
+            width: '100%',
+            maxWidth: '100vh',
+            maxHeight: '100vw',
+        };
 
         return (
-            <div id={CalibratorCircle.fieldName} className={'fullscreen'} style={wrapperStyle}>
+            <div id={CalibratorSingleCircle.fieldName} className={'fullscreen'} style={wrapperStyle}>
                 <img src={'v4_calib_marker.jpg'}
-                     className={CalibratorCircle.elementName}
-                     id={CalibratorCircle.elementName}
+                     className={CalibratorSingleCircle.elementName}
+                     id={CalibratorSingleCircle.elementName}
                      style={style}
                      alt={''}
                 />
@@ -61,4 +65,4 @@ class CalibratorCircle extends React.Component {
     }
 }
 
-export default CalibratorCircle;
+export default CalibratorSingleCircle;
