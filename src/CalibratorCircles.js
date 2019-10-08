@@ -6,7 +6,7 @@ import ZingTouch from 'zingtouch/src/ZingTouch';
 class CalibratorCircles extends React.Component {
     static fieldName = 'tapFieldCircles';
     static elementName = 'calibrateCircles';
-    static sideSize = 200;
+    static sideSize = 100;
     static sizeMod = 0.05;
 
     constructor(props) {
